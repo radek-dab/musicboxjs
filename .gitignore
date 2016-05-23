@@ -3,3 +3,6 @@ music/
 *.njsproj
 *.sln
 /.vs/musicboxjs/v14
+bin/
+obj/
+/.ntvs_analysis.dat
