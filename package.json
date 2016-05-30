@@ -2,6 +2,7 @@
   "name": "musicboxjs",
   "dependencies": {
     "express": "^4.13.4",
+    "less-middleware": "^2.1.0",
     "morgan": "^1.7.0",
     "musicmetadata": "^2.0.2",
     "player": "^0.6.1"

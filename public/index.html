@@ -2,17 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <title>Musicboxjs</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script>
       var app = angular.module('app', [])
       app.controller('ApplicationCtrl', function($scope) {
-        $scope.files = ['abc', 'def'];
+        $scope.files = [];
+        for (var i = 1; i <= 100; i++)
+          $scope.files.push('File '+i);
       });
     </script>
   </head>
   <body ng-app="app" ng-controller="ApplicationCtrl">
-    <ul>
-      <li ng-repeat="file in files"><a href="#">{{ file }}</a></li>
-    </ul>
+    <div class="container">
+      <ul class="list-group">
+        <li class="list-group-item"ng-repeat="file in files">
+          <a href="#">{{ file }}</a>
+        </li>
+      </ul>
+    </div>
+    <nav class="control-bar">
+      <span class="secondary-control glyphicon glyphicon-step-backward"></span>
+      <span class="primary-control glyphicon glyphicon-play"></span>
+      <span class="secondary-control glyphicon glyphicon-step-forward"></span>
+    </nav>
   </body>
 </html>

@@ -1,8 +1,11 @@
+*.css
 node_modules/
-music/
+/music/
+
+# Visual Studio
 *.njsproj
 *.sln
-/.vs/musicboxjs/v14
 bin/
 obj/
+/.vs/musicboxjs/v14
 /.ntvs_analysis.dat

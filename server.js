@@ -1,11 +1,13 @@
 var express = require('express');
 var morgan = require('morgan');
+var lessMiddleware = require('less-middleware');
 var Player = require('player');
 var config = require('./config');
 
 var app = express();
 app.use(morgan(config.logFormat));
-app.use(express.static('public'));
+app.use(lessMiddleware(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 
 var server = app.listen(config.port, function() {
   console.log('Server is listening on', config.port);
