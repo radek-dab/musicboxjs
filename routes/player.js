@@ -8,4 +8,11 @@ router.get('/library', function(req, res, next) {
   });
 });
 
+router.get('/allsongs', function (req, res, next){
+	player.getAllFiles(function (err, files) {
+		if (err) return next(err);
+		res.json(files);
+	});
+});
+
 module.exports = router;

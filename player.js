@@ -28,16 +28,13 @@ exports.pause = function() {
 exports.getLibrary = function(next) {
   client.sendCommand(mpd.cmd('listallinfo', []), function(err, msg) {
     if (err) return next(err);
-    // Split message into entries
-    var entries = msg.split(/(?=file|directory)/);
-    // Parse strings to objects
-    for (var i = 0; i < entries.length; i++)
-      entries[i] = mpd.parseKeyValueMessage(entries[i]);
-    // Remove directories from the list
-    _.remove(entries, function(entry) {
-      return typeof entry.directory !== undefined;
-    });
-    // Return result
-    next(null, entries);
+    next(null, mpd.parseArrayMessage(msg).filter(function (entry) { return entry.file; }));
   });
+};
+
+exports.getAllFiles = function (next) {
+	client.sendCommand(mpd.cmd('list', ['file']), function (err, msg) {
+		if (err) return next(err);
+		next(null, mpd.parseArrayMessage(msg));
+	});
 };
