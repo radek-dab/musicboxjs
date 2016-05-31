@@ -10,7 +10,7 @@ client.on('ready', function() {
 });
 
 exports.play = function() {
-  client,sendCommand(mpd.cmd('play', []), function(err, msg) {
+  client.sendCommand(mpd.cmd('play', []), function(err, msg) {
     if (err) throw err;
     console.log(msg);
   });
@@ -18,7 +18,7 @@ exports.play = function() {
 
 exports.pause = function() {
   // TODO: pause w/o value is deprecated.
-  client,sendCommand(mpd.cmd('pause', []), function(err, msg) {
+  client.sendCommand(mpd.cmd('pause', []), function(err, msg) {
     if (err) throw err;
     console.log(msg);
   });
