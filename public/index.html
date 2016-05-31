@@ -18,7 +18,7 @@
         for (var i = 1; i <= 100; i++)
           $scope.files.push('File '+i);
 
-        $scope.playing: false,
+        $scope.playing = false;
 
         $scope.pause = function() {
           $scope.playback.playing = !$scope.playing;
