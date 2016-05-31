@@ -17,20 +17,36 @@
         $scope.files = [];
         for (var i = 1; i <= 100; i++)
           $scope.files.push('File '+i);
+
+        $scope.playing: false,
+
+        $scope.pause = function() {
+          $scope.playback.playing = !$scope.playing;
+        };
+
+        $scope.previous = function() {
+
+        };
+
+        $scope.next = function() {
+
+        };
       });
     </script>
   </head>
   <body ng-app="app" ng-controller="ApplicationCtrl">
     <div class="container">
       <ul class="list-group">
-        <li class="list-group-item"ng-repeat="file in files">
+        <li class="list-group-item" ng-repeat="file in files">
           <a href="#">{{ file }}</a>
         </li>
       </ul>
     </div>
     <nav class="control-bar">
       <span class="secondary-control glyphicon glyphicon-step-backward"></span>
-      <span class="primary-control glyphicon glyphicon-play"></span>
+      <span class="primary-control glyphicon"
+            ng-class="playing ? 'glyphicon-pause' : 'glyphicon-play'"
+            ng-click="pause()"></span>
       <span class="secondary-control glyphicon glyphicon-step-forward"></span>
     </nav>
   </body>
