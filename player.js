@@ -1,4 +1,5 @@
 var mpd = require('mpd');
+var _ = require('lodash');
 var config = require('./config');
 
 var client = mpd.connect(config.mpd.connection);
@@ -21,5 +22,22 @@ exports.pause = function() {
   client.sendCommand(mpd.cmd('pause', []), function(err, msg) {
     if (err) throw err;
     console.log(msg);
+  });
+};
+
+exports.getLibrary = function(next) {
+  client.sendCommand(mpd.cmd('listallinfo', []), function(err, msg) {
+    if (err) return next(err);
+    // Split message into entries
+    var entries = msg.split(/(?=file|directory)/);
+    // Parse strings to objects
+    for (var i = 0; i < entries.length; i++)
+      entries[i] = mpd.parseKeyValueMessage(entries[i]);
+    // Remove directories from the list
+    _.remove(entries, function(entry) {
+      return typeof entry.directory !== undefined;
+    });
+    // Return result
+    next(null, entries);
   });
 };
