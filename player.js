@@ -25,16 +25,40 @@ exports.pause = function() {
   });
 };
 
-exports.getLibrary = function(next) {
-  client.sendCommand(mpd.cmd('listallinfo', []), function(err, msg) {
+exports.getLibrary = function (next) {
+  client.sendCommand(mpd.cmd('listallinfo', []), function (err, msg) {
     if (err) return next(err);
-    next(null, mpd.parseArrayMessage(msg).filter(function (entry) { return entry.file; }));
+    
+    var results = [];
+    var obj = {};
+    
+    msg.split('\n').forEach(function (p) {
+      if (p.length === 0) {
+        return;
+      }
+      var keyValue = p.match(/([^ ]+): (.*)/);
+      
+      if (keyValue[1] == 'directory')
+        return;
+      
+      if (obj[keyValue[1]] !== undefined && keyValue[1] == 'file') {
+        results.push(obj);
+        obj = {};
+        obj[keyValue[1]] = keyValue[2];
+      }
+      else {
+        obj[keyValue[1]] = keyValue[2];
+      }
+    });
+    results.push(obj);
+    
+    next(null, results);
   });
 };
 
 exports.getAllFiles = function (next) {
-	client.sendCommand(mpd.cmd('list', ['file']), function (err, msg) {
-		if (err) return next(err);
-		next(null, mpd.parseArrayMessage(msg));
-	});
+  client.sendCommand(mpd.cmd('list', ['file']), function (err, msg) {
+    if (err) return next(err);
+    next(null, mpd.parseArrayMessage(msg));
+  });
 };
