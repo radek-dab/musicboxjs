@@ -103,3 +103,17 @@ exports.getPlaylist = function (next) {
     next(null, results);
   });
 };
+
+exports.nextSong = function (next) {
+  client.sendCommand(mpd.cmd('next', []), function (err, msg) {
+    if (err) return next(err);
+    next(null, msg);
+  });
+};
+
+exports.previousSong = function (next) {
+  client.sendCommand(mpd.cmd('previous', []), function (err, msg) {
+    if (err) return next(err);
+    next(null, msg);
+  });
+};

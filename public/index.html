@@ -31,15 +31,19 @@
             $http.get('/api/pause/' + arg).then(function (res) {
               $scope.status = res.data;
             });
-          }
+          };
         };
 
         $scope.previous = function() {
-
+          $http.get('/api/prev').then(function (res) {
+            $scope.status = res.data;
+          });
         };
 
         $scope.next = function() {
-
+          $http.get('/api/next').then(function (res) {
+            $scope.status = res.data;
+          });
         };
 
         $scope.clear = function () {
@@ -48,7 +52,7 @@
             $scope.status = res.data;
             $scope.$apply();
           });
-        }
+        };
 
         $scope.addall = function () {
           $http.get('/api/pladdall').then(function (res) {
@@ -89,11 +93,11 @@
     </div>
     <nav class="control-bar">
       <span class="secondary-control" ng-click="addall()">Add all songs</span>
-      <span class="secondary-control glyphicon glyphicon-step-backward"></span>
+      <span class="secondary-control glyphicon glyphicon-step-backward" ng-click="previous()"></span>
       <span class="primary-control glyphicon"
             ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
             ng-click="pause()"></span>
-      <span class="secondary-control glyphicon glyphicon-step-forward"></span>
+      <span class="secondary-control glyphicon glyphicon-step-forward" ng-click="next()"></span>
       <span class="secondary-control" ng-click="clear()">Clear playlist</span>
     </nav>
   </body>

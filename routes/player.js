@@ -42,6 +42,26 @@ router.get('/pause/:arg', function (req, res, next) {
   })
 });
 
+router.get('/next', function (req, res, next) {
+  player.nextSong(function (err) {
+    if (err) return next(err);
+    player.status(function (err, msg) {
+      if (err) return next(err);
+      res.json(msg);
+    });
+  });
+});
+
+router.get('/prev', function (req, res, next) {
+  player.previousSong(function (err) {
+    if (err) return next(err);
+    player.status(function (err, msg) {
+      if (err) return next(err);
+      res.json(msg);
+    });
+  });
+});
+
 //Clear current playlist - returns mpd status
 router.get('/plclear', function (req, res, next) {
   player.clearPlaylist(function (err) {
