@@ -16,18 +16,18 @@
       app.controller('ApplicationCtrl', function ($scope, $http) {
         $scope.getStatus = function () {
           $http.get('/api/status').then(function (res) {
-            $scope.status = res.data;
+            $scope.status = res.data[0];
           });
         };
 
         $scope.pause = function () {
           //state: stop, play, pause
-          if ($scope.status.state == 'stop') {
+          if ($scope.status.state === 'stop') {
             $http.get('/api/play').then(function (res) {
               $scope.getStatus();
             });
           } else {
-            var arg = $scope.status.state == 'play' ? 0 : 1;
+            var arg = $scope.status.state == 'play' ? 1 : 0;
             $http.get('/api/pause/' + arg).then(function (res) {
               $scope.getStatus();
             });

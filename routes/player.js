@@ -18,7 +18,7 @@ router.get('/status', function (req, res, next) {
 router.get('/play', function (req, res, next) {
   player.play(function (err, msg) {
     if (err) return next(err);
-    res.end();
+    res.status(200).send('OK');
   });
 });
 
@@ -27,14 +27,17 @@ router.param('arg', function (req, res, next, id) {
 });
 
 router.get('/pause/:arg', function (req, res, next) {
-  
+  player.pause(req.params.arg, function (err){
+    if (err) return next(err);
+    res.status(200).send('OK');
+  })
 });
 
 //Clear current playlist
 router.get('/plclear', function (req, res, next) {
   player.clearPlaylist(function (err) {
     if (err) return next(err);
-    res.end()
+    res.status(200).send('OK');
   });
 });
 
