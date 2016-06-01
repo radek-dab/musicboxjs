@@ -81,4 +81,12 @@ router.get('/pladdall', function (req, res, next) {
   });
 });
 
+//TODO: start and end of shuffling
+router.get('/plshuffle', function (req, res, next) {
+  player.shuffle(null, null, function (err) {
+    if (err) return next(err);
+  });
+  sendMpdStatus(next, res);
+});
+
 module.exports = router;

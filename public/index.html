@@ -20,23 +20,14 @@
           });
         };
 
-        //$scope.changeBackgroud = function (id,color) {
-        //  var elem = document.getElementById(id);
-        //  elem.style.backgroundColor = color;
-        //};
-
         $scope.pause = function () {
           //state: stop, play, pause
           if ($scope.status.state === 'stop') {
             $http.get('/api/play').then(function (res) {
               $scope.status = res.data;
-              //$scope.changeBackgroud($scope.status.songid, 'lightblue');
             });
           } else {
             var arg = $scope.status.state == 'play' ? 1 : 0;
-            //arg == 0 ?
-             // $scope.changeBackgroud($scope.status.songid, 'lightblue') :
-              //$scope.changeBackgroud($scope.status.songid, 'white');
 
             $http.get('/api/pause/' + arg).then(function (res) {
               $scope.status = res.data;
@@ -45,19 +36,14 @@
         };
 
         $scope.previous = function () {
-          //$scope.changeBackgroud($scope.status.songid, 'white');
           $http.get('/api/prev').then(function (res) {
             $scope.status = res.data;
-            //$scope.$apply();
-            //$scope.changeBackgroud($scope.status.songid, 'lightblue');
           });
         };
 
         $scope.next = function () {
-          //$scope.changeBackgroud($scope.status.songid, 'white');
           $http.get('/api/next').then(function (res) {
             $scope.status = res.data;
-            //$scope.changeBackgroud($scope.status.songid, 'lightblue');
           });
         };
 
@@ -72,7 +58,6 @@
           $http.get('/api/pladdall').then(function (res) {
             $scope.songs = res.data;
             $scope.getStatus();
-            //$scope.$apply();
           });
         };
 
@@ -82,12 +67,22 @@
           var split = file.split('/');
           return split[split.length - 1];
         };
-        
+
+        $scope.shuffle = function () {
+          $http.get('/api/plshuffle').then(function (res) {
+            $scope.status = res.data;
+          });
+          $scope.getPlaylist();
+        };
+
+        $scope.getPlaylist = function () {
+          $http.get('/api/plsongs').then(function (res) {
+            $scope.songs = res.data;
+          });
+        };
 
         $scope.getStatus();
-        $http.get('/api/plsongs').then(function (res) {
-          $scope.songs = res.data;
-        });
+        $scope.getPlaylist();
       });
     </script>
   </head>
@@ -113,6 +108,7 @@
             ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
             ng-click="pause()"></span>
       <span class="secondary-control glyphicon glyphicon-step-forward" ng-click="next()"></span>
+      <span class="secondary-control" ng-click="shuffle()">Shuffle</span> 
       <span class="secondary-control" ng-click="clear()">Clear playlist</span>
     </nav>
   </body>

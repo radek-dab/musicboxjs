@@ -124,3 +124,13 @@ exports.previousSong = function (next) {
     next(null, msg);
   });
 };
+
+exports.shuffle = function (start, end, next){  
+  var range = [];
+  if (Number.isInteger(start) && Number.isInteger(end))
+    range.push(start + ':' + end);
+  client.sendCommand(mpd.cmd('shuffle', range), function (err, msg) {
+    if (err) return next(err);
+    next(null, msg);
+  });
+}
