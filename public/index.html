@@ -16,7 +16,7 @@
   <body ng-app="app" ng-controller="ApplicationCtrl">
     <div class="container">
       <div class="list-group">
-        <a href="#" class="list-group-item" ng-repeat="song in songs" 
+        <a href="#" class="list-group-item" ng-repeat="song in songs"
            id="{{song.Id}}" style="background-color:{{song.Id==status.songid?'lightblue':'white'}}">
           <h4 class="list-group-item-heading">{{song.Title}}</h4>
           <p class="list-group-item-text">{{song.Artist}}</p>
@@ -29,14 +29,20 @@
       </div>
     </div>
     <nav class="control-bar">
-      <span class="secondary-control" ng-click="addall()">Add all songs</span>
-      <span class="secondary-control glyphicon glyphicon-step-backward" ng-click="previous()"></span>
-      <span class="primary-control glyphicon"
+      <span class="secondary-control ghost"></span>
+      <span class="secondary-control glyphicon glyphicon-import"
+            title="Add all songs" ng-click="addall()"></span>
+      <span class="secondary-control glyphicon glyphicon-step-backward"
+            title="Previous" ng-click="previous()"></span>
+      <span class="primary-control glyphicon" title="Play/pause"
             ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
             ng-click="pause()"></span>
-      <span class="secondary-control glyphicon glyphicon-step-forward" ng-click="next()"></span>
-      <span class="secondary-control" ng-click="shuffle()">Shuffle</span> 
-      <span class="secondary-control" ng-click="clear()">Clear playlist</span>
+      <span class="secondary-control glyphicon glyphicon-step-forward"
+            title="Next" ng-click="next()"></span>
+      <span class="secondary-control glyphicon glyphicon-random"
+            title="Shuffle" ng-click="shuffle()"></span>
+      <span class="secondary-control glyphicon glyphicon-erase"
+            title="Clear playlist" ng-click="clear()"></span>
     </nav>
   </body>
 </html>
