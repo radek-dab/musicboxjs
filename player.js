@@ -9,6 +9,13 @@ client.on('connect', function() {
 client.on('ready', function() {
   console.log('MPD server is ready to accept commands');
 });
+client.on('system-player', function () {
+  client.sendCommand(mpd.cmd('status', []), function (err, msg) {
+    if (err) console.log(err);
+    console.log(msg);
+  });
+});
+
 
 exports.status = function (next) {
   client.sendCommand(mpd.cmd('status', []), function (err, msg) {
