@@ -10,3 +10,4 @@ bin/
 obj/
 /.vs/musicboxjs/v14
 /.ntvs_analysis.dat
+/.vs/config

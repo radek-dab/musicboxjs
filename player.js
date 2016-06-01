@@ -13,7 +13,7 @@ client.on('ready', function() {
 exports.status = function (next) {
   client.sendCommand(mpd.cmd('status', []), function (err, msg) {
     if (err) return next(err);
-    next(null, mpd.parseArrayMessage(msg));
+    next(null, mpd.parseArrayMessage(msg)[0]);    
   });
 };
 
@@ -62,10 +62,10 @@ exports.getLibrary = function (next) {
   });
 };
 
-exports.clearPlaylist = function () {
+exports.clearPlaylist = function (next) {
   client.sendCommand(mpd.cmd('clear', []), function (err,msg) {
     if (err) return next(err);
-    console.log(msg);
+    next(null, '');
   });
 };
 
@@ -73,7 +73,7 @@ exports.clearPlaylist = function () {
 exports.addAllSongs = function (next) {
   client.sendCommand(mpd.cmd('add', ['/']), function (err, msg) {
     if (err) return next(err);
-    console.log(msg);
+    next(null, '');
   });
 }
 

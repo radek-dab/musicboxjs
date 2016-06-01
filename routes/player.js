@@ -8,6 +8,7 @@ router.get('/library', function (req, res, next) {
   });
 });
 
+
 router.get('/status', function (req, res, next) {
   player.status(function (err, status){
     if (err) return next(err);
@@ -15,10 +16,14 @@ router.get('/status', function (req, res, next) {
   })
 })
 
+//Use play if mpd status is "stop" - returns mpd status
 router.get('/play', function (req, res, next) {
   player.play(function (err, msg) {
     if (err) return next(err);
-    res.status(200).send('OK');
+    player.status(function (err, msg) {
+      if (err) return next(err);
+      res.json(msg);
+    });
   });
 });
 
@@ -26,18 +31,25 @@ router.param('arg', function (req, res, next, id) {
   next();
 });
 
+//Toggle pause/play - returns mpd status
 router.get('/pause/:arg', function (req, res, next) {
   player.pause(req.params.arg, function (err){
     if (err) return next(err);
-    res.status(200).send('OK');
+    player.status(function (err, msg) {
+      if (err) return next(err);
+      res.json(msg);
+    });
   })
 });
 
-//Clear current playlist
+//Clear current playlist - returns mpd status
 router.get('/plclear', function (req, res, next) {
   player.clearPlaylist(function (err) {
     if (err) return next(err);
-    res.status(200).send('OK');
+    player.status(function (err, msg) {
+      if (err) return next(err);
+      res.json(msg);
+    });
   });
 });
 
