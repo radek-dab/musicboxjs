@@ -3,14 +3,15 @@ module.exports = {
   logFormat: 'dev',
   mpd: {
     connection: {
-      host: 'localhost', 
+      host: 'localhost',
       port: 6600
     }
   },
   gpio: {
-    playPin: 27,
-    previousPin: 10,
-    nextPin: 22,
-    statusPin: 24
+    playPin: 13,
+    previousPin: 19,
+    nextPin: 15,
+    statusPin: 18,
+    flashTime: 500
   }
 };

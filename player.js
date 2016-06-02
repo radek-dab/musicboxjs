@@ -124,6 +124,7 @@ exports.getPlaylist = function (next) {
 };
 
 exports.nextSong = function (next) {
+  next = next || function() {};
   client.sendCommand(mpd.cmd('next', []), function (err, msg) {
     if (err) return next(err);
     next(null, msg);
@@ -131,6 +132,7 @@ exports.nextSong = function (next) {
 };
 
 exports.previousSong = function (next) {
+  next = next || function() {};
   client.sendCommand(mpd.cmd('previous', []), function (err, msg) {
     if (err) return next(err);
     next(null, msg);
