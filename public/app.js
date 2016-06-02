@@ -75,4 +75,22 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
 
   $scope.getStatus();
   $scope.getPlaylist();
+
+  var wsUrl = 'ws://' + window.location.host;
+  var ws = new WebSocket(wsUrl);
+  ws.onopen = function() {
+    console.log('WebSocket ' + wsUrl + ' connected');
+  };
+  ws.onclose = function() {
+    console.log('WebSocket ' + wsUrl + ' disconnected');
+  };
+  ws.onmessage = function(msg) {
+    var data = JSON.parse(msg.data);
+    if ('event' in data) {
+      switch (data.event) {
+        case 'status':
+          $scope.getStatus();
+      }
+    }
+  };
 });

@@ -4,6 +4,7 @@ var lessMiddleware = require('less-middleware');
 
 var config = require('./config');
 var player = require('./player');
+var websocket = require('./websocket');
 
 if (process.env.NODE_ENV == 'raspberrypi') {
   console.log('Raspberry Pi environment');
@@ -19,3 +20,4 @@ app.use('/api', require('./routes/player'));
 var server = app.listen(config.port, function() {
   console.log('Server is listening on', config.port);
 });
+websocket.listen(server);

@@ -1,6 +1,9 @@
 var mpd = require('mpd');
-var _ = require('lodash');
+var EventEmitter = require('events').EventEmitter;
 var config = require('./config');
+
+// Make player be instance of EventEmitter
+module.exports = exports = new EventEmitter();
 
 var client = mpd.connect(config.mpd.connection);
 client.on('connect', function() {
@@ -9,18 +12,14 @@ client.on('connect', function() {
 client.on('ready', function() {
   console.log('MPD server is ready to accept commands');
 });
-client.on('system-player', function () {
-  client.sendCommand(mpd.cmd('status', []), function (err, msg) {
-    if (err) console.log(err);
-    console.log(msg);
-  });
+client.on('system-player', function() {
+  exports.emit('status');
 });
-
 
 exports.status = function (next) {
   client.sendCommand(mpd.cmd('status', []), function (err, msg) {
     if (err) return next(err);
-    next(null, mpd.parseArrayMessage(msg)[0]);
+    next(null, mpd.parseKeyValueMessage(msg));
   });
 };
 
