@@ -7,7 +7,18 @@ gpio.setup(config.gpio.previousPin, gpio.DIR_IN, gpio.EDGE_FALLING);
 gpio.setup(config.gpio.nextPin, gpio.DIR_IN, gpio.EDGE_FALLING);
 gpio.setup(config.gpio.statusPin, gpio.DIR_OUT);
 
+var locked = false;
+
+function lock() {
+  locked = true;
+  setTimeout(function() {
+    locked = false;
+  }, config.gpio.lockTime);
+}
+
 gpio.on('change', function(channel, value) {
+  if (locked) return;
+  lock();
   switch (channel) {
     case config.gpio.playPin:
       player.status(function(err, status) {

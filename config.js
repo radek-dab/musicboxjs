@@ -12,6 +12,7 @@ module.exports = {
     previousPin: 19,
     nextPin: 15,
     statusPin: 18,
-    flashTime: 500
+    flashTime: 500,
+    lockTime: 500
   }
 };
