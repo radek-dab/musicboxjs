@@ -16,12 +16,11 @@
   <body ng-app="app" ng-controller="ApplicationCtrl">
     <div class="container">
       <div class="list-group">
-        <a href="#" id="{{song.Id}}" class="list-group-item"
-           ng-repeat="song in songs" ng-class="song.Id == status.songid ? 'active' : ''"
-           ng-click="play(song.Id)">
+        <div id="{{song.Id}}" class="list-group-item" ng-repeat="song in songs"
+             ng-class="song.Id == status.songid ? 'active' : ''" ng-click="play(song.Id)">
           <h4 class="list-group-item-heading">{{song.Title || getFileName(song.file)}}</h4>
           <p class="list-group-item-text">{{song.Artist}}</p>
-        </a>
+        </div>
       </div>
     </div>
     <nav class="control-bar">
