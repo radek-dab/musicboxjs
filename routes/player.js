@@ -5,7 +5,7 @@ var sendMpdStatus = function (next, res) {
   player.status(function (err, status) {
     if (err) return next(err);
     res.json(status);
-  });  
+  });
 };
 
 router.get('/library', function (req, res, next) {
@@ -15,21 +15,16 @@ router.get('/library', function (req, res, next) {
   });
 });
 
-
 router.get('/status', function (req, res, next) {
   sendMpdStatus(next, res);
 })
 
 //Use play if mpd status is "stop" - returns mpd status
-router.get('/play', function (req, res, next) {
-  player.play(function (err, msg) {
+router.get('/play/:id?', function (req, res, next) {
+  player.play(req.params.id, function (err, msg) {
     if (err) return next(err);
     sendMpdStatus(next, res);
   });
-});
-
-router.param('arg', function (req, res, next, id) {
-  next();
 });
 
 //Toggle pause/play - returns mpd status

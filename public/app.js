@@ -6,6 +6,12 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
     });
   };
 
+  $scope.play = function(id) {
+    $http.get('/api/play/'+id).then(function(res) {
+      $scope.status = res.data;
+    });
+  };
+
   $scope.pause = function () {
     //state: stop, play, pause
     if ($scope.status.state === 'stop') {

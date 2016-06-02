@@ -20,12 +20,24 @@ client.on('system-player', function () {
 exports.status = function (next) {
   client.sendCommand(mpd.cmd('status', []), function (err, msg) {
     if (err) return next(err);
-    next(null, mpd.parseArrayMessage(msg)[0]);    
+    next(null, mpd.parseArrayMessage(msg)[0]);
   });
 };
 
-exports.play = function (next) {
-  client.sendCommand(mpd.cmd('play', []), function (err, msg) {
+/**
+ * Play current song or song specified by ID
+ *
+ * @method play
+ * @param {number} [id] Song ID
+ * @param {function} next Callback function
+ */
+exports.play = function (id, next) {
+  if (arguments.length < 2) {
+    next = id;
+    id = undefined;
+  }
+  var args = typeof id == 'undefined' ? [] : [id];
+  client.sendCommand(mpd.cmd('playid', args), function (err, msg) {
     if (err) return next(err);
     next(null, msg);
   });
@@ -42,7 +54,7 @@ exports.pause = function(PAUSE, next) {
 exports.getLibrary = function (next) {
   client.sendCommand(mpd.cmd('listallinfo', []), function (err, msg) {
     if (err) return next(err);
-    
+
     var results = [];
     var obj = {};
     msg.split('\n').forEach(function (p) {
@@ -50,10 +62,10 @@ exports.getLibrary = function (next) {
         return;
       }
       var keyValue = p.match(/([^ ]+): (.*)/);
-      
+
       if (keyValue[1] == 'directory')
         return;
-      
+
       if (obj[keyValue[1]] !== undefined && keyValue[1] == 'file') {
         results.push(obj);
         obj = {};
@@ -64,7 +76,7 @@ exports.getLibrary = function (next) {
       }
     });
     results.push(obj);
-    
+
     next(null, results);
   });
 };
@@ -95,7 +107,7 @@ exports.getPlaylist = function (next) {
         return;
       }
       var keyValue = p.match(/([^ ]+): (.*)/);
-            
+
       if (obj[keyValue[1]] !== undefined && keyValue[1] == 'file') {
         results.push(obj);
         obj = {};
@@ -106,7 +118,7 @@ exports.getPlaylist = function (next) {
       }
     });
     results.push(obj);
-    
+
     next(null, results);
   });
 };
@@ -125,7 +137,7 @@ exports.previousSong = function (next) {
   });
 };
 
-exports.shuffle = function (start, end, next){  
+exports.shuffle = function (start, end, next){
   var range = [];
   if (Number.isInteger(start) && Number.isInteger(end))
     range.push(start + ':' + end);
