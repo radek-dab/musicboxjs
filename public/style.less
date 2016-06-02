@@ -18,10 +18,14 @@
   margin-bottom: 100px;
 }
 
-.list-group-item.active {
-  @bg-color: @primary-color;
+.list-group-item {
+  cursor: pointer;
 
-  &, &:hover, &:focus {
+  &.active,
+  &.active:hover,
+  &.active:focus {
+    @bg-color: @primary-color;
+
     background: linear-gradient(lighten(@bg-color, 10%), @bg-color);
     border-color: darken(@bg-color, 10%);
     text-shadow: none;
