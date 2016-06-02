@@ -44,6 +44,7 @@ exports.play = function (id, next) {
 
 //Toggles pause/resumes playing, PAUSE is 0 or 1.
 exports.pause = function(PAUSE, next) {
+  next = next || function() {};
   client.sendCommand(mpd.cmd('pause', [PAUSE]), function(err, msg) {
     if (err) return next(err);
     next(null, msg);

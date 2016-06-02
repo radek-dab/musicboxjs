@@ -8,6 +8,9 @@ module.exports = {
     }
   },
   gpio: {
-    playPin: 27
+    playPin: 27,
+    previousPin: 10,
+    nextPin: 22,
+    statusPin: 24
   }
 };
