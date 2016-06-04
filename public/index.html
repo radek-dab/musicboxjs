@@ -14,47 +14,47 @@
     <script src="app.js"></script>
     <script src="ng-file-upload.min.js"></script>
   </head>
-  <body ng-app="app" ng-controller="ApplicationCtrl">
-    <div class="container">
-      <div class="list-group">
-        <div id="{{song.Id}}" class="list-group-item" ng-repeat="song in songs"
-             ng-class="song.Id == status.songid ? 'active' : ''" ng-click="play(song.Id)">
-          <h4 class="list-group-item-heading">{{song.Title || getFileName(song.file)}}</h4>
-          <p class="list-group-item-text">{{song.Artist}}</p>
-        </div>
+<body ng-app="app" ng-controller="ApplicationCtrl">
+  <div class="container">
+    <div class="list-group">
+      <div id="{{song.Id}}" class="list-group-item" ng-repeat="song in songs"
+           ng-class="song.Id == status.songid ? 'active' : ''" ng-click="play(song.Id)">
+        <h4 class="list-group-item-heading">{{song.Title || getFileName(song.file)}}</h4>
+        <p class="list-group-item-text">{{song.Artist}}</p>
       </div>
     </div>
-    <nav class="control-bar">
-      <span class="secondary-control glyphicon glyphicon-cloud-upload"
-            title="Upload music" ng-click="showUploadForm()"></span>
-      <div class="uploadForm" 
-           ng-show="uploadFormVisible">
-        <form ng-controller="FileUpload as up" name="up.upload_form">
-          <input type="file" ngf-select 
-                 ng-model="up.file" name="file"
-                 ngf-max-size="20MB"/>
-          <i ng-show="up.upload_form.file.$error.required">*required</i><br>
-          <i ng-show="up.upload_form.file.$error.maxSize">
-            File too large
-            {{up.file.size / 1000000|number:1}}MB: max 20M
-          </i>
-          <button type="submit" ng-click="up.submit()">Upload</button>
-          <p>{{up.progress}}</p>
-        </form>
-      </div>
-      <span class="secondary-control glyphicon glyphicon-import"
-            title="Add all songs" ng-click="addall()"></span>
-      <span class="secondary-control glyphicon glyphicon-step-backward"
-            title="Previous" ng-click="previous()"></span>
-      <span class="primary-control glyphicon" title="Play/pause"
-            ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
-            ng-click="pause()"></span>
-      <span class="secondary-control glyphicon glyphicon-step-forward"
-            title="Next" ng-click="next()"></span>
-      <span class="secondary-control glyphicon glyphicon-random"
-            title="Shuffle" ng-click="shuffle()"></span>
-      <span class="secondary-control glyphicon glyphicon-erase"
-            title="Clear playlist" ng-click="clear()"></span>
-    </nav>
-  </body>
+  </div>
+  <nav class="control-bar">
+    <span class="secondary-control glyphicon glyphicon-cloud-upload"
+          title="Upload music" ng-click="showUploadForm()"></span>
+    <span class="secondary-control glyphicon glyphicon-import"
+          title="Add all songs" ng-click="addall()"></span>
+    <span class="secondary-control glyphicon glyphicon-step-backward"
+          title="Previous" ng-click="previous()"></span>
+    <span class="primary-control glyphicon" title="Play/pause"
+          ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
+          ng-click="pause()"></span>
+    <span class="secondary-control glyphicon glyphicon-step-forward"
+          title="Next" ng-click="next()"></span>
+    <span class="secondary-control glyphicon glyphicon-random"
+          title="Shuffle" ng-click="shuffle()"></span>
+    <span class="secondary-control glyphicon glyphicon-erase"
+          title="Clear playlist" ng-click="clear()"></span>
+  </nav>
+  <div class="uploadForm"
+       ng-show="uploadFormVisible">
+    <form ng-controller="FileUpload as up" name="up.upload_form">
+      <input type="file" ngf-select
+             ng-model="up.file" name="file"
+             ngf-max-size="20MB" />
+      <i ng-show="up.upload_form.file.$error.required">*required</i><br>
+      <i ng-show="up.upload_form.file.$error.maxSize">
+        File too large
+        {{up.file.size / 1000000|number:1}}MB: max 20M
+      </i>
+      <button type="submit" ng-click="up.submit()">Upload</button>
+      <p>{{up.progress}}</p>
+    </form>
+  </div>
+</body>
 </html>
