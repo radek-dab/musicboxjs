@@ -48,7 +48,7 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
 
   $scope.addall = function () {
     $http.get('/api/pladdall').then(function (res) {
-      $scope.songs = res.data;
+      //$scope.songs = res.data;
       $scope.getStatus();
     });
   };
@@ -64,7 +64,7 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
     $http.get('/api/plshuffle').then(function (res) {
       $scope.status = res.data;
     });
-    $scope.getPlaylist();
+    //$scope.getPlaylist();
   };
 
   $scope.getPlaylist = function () {
@@ -89,12 +89,17 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
   ws.onclose = function() {
     console.log('WebSocket ' + wsUrl + ' disconnected');
   };
-  ws.onmessage = function(msg) {
+  ws.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
     if ('event' in data) {
       switch (data.event) {
         case 'status':
           $scope.getStatus();
+          break;
+        case 'playlist':
+          $scope.getPlaylist();
+          $scope.getStatus();
+          break;
       }
     }
   };

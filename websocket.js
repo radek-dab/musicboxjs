@@ -24,3 +24,7 @@ function broadcastEvent(eve) {
 player.on('status', function() {
   broadcastEvent('status');
 });
+
+player.on('playlist', function () {
+  broadcastEvent('playlist');
+});
