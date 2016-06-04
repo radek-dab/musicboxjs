@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var player = require('../player');
 var multer = require('multer');
-var config = require('./config');
+var config = require('../config');
 var rpiEnv = process.env.NODE_ENV == 'raspberrypi';
 
 var sendMpdStatus = function (next, res) {
@@ -20,11 +20,7 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     var datetimestamp = Date.now();
-    cb(null, 
-      file.fieldname + '-' +
-      datetimestamp + '.' + 
-      file.originalname.split('.')[file.originalname.split('.').length - 1]
-    )
+    cb(null, datetimestamp + ' - ' + file.originalname)
   }
 });
 
@@ -38,10 +34,8 @@ router.post('/upload', function (req, res, next) {
       res.json({ error_code: 1, err_desc: err });
       return;
     }
-    console.log(req.file);
     player.updateMpd(null, function (err, msg) {
       if (err) return next(err);
-      console.log(msg);
       res.json({ error_code: 0, err_desc: null });
     });
   });

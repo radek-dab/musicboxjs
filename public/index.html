@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="app.js"></script>
+    <script src="ng-file-upload.min.js"></script>
   </head>
   <body ng-app="app" ng-controller="ApplicationCtrl">
     <div class="container">
@@ -24,7 +25,23 @@
       </div>
     </div>
     <nav class="control-bar">
-      <span class="secondary-control ghost"></span>
+      <span class="secondary-control glyphicon glyphicon-cloud-upload"
+            title="Upload music" ng-click="showUploadForm()"></span>
+      <div class="uploadForm" 
+           ng-show="uploadFormVisible">
+        <form ng-controller="FileUpload as up" name="up.upload_form">
+          <input type="file" ngf-select 
+                 ng-model="up.file" name="file"
+                 ngf-max-size="20MB"/>
+          <i ng-show="up.upload_form.file.$error.required">*required</i><br>
+          <i ng-show="up.upload_form.file.$error.maxSize">
+            File too large
+            {{up.file.size / 1000000|number:1}}MB: max 20M
+          </i>
+          <button type="submit" ng-click="up.submit()">Upload</button>
+          <p>{{up.progress}}</p>
+        </form>
+      </div>
       <span class="secondary-control glyphicon glyphicon-import"
             title="Add all songs" ng-click="addall()"></span>
       <span class="secondary-control glyphicon glyphicon-step-backward"
