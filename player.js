@@ -148,3 +148,23 @@ exports.shuffle = function (start, end, next){
     next(null, msg);
   });
 }
+
+//check for updates at specified uri or in whole music library
+exports.updateMpd = function (uri, next) {
+  next = next || function () { };
+  var args = [];
+  if (uri)
+    args.push(uri);
+  client.sendCommand(mpd.cmd('update', args), function (err, msg) {
+    if (err) return next(err);
+    next(null, msg);
+  });
+};
+
+//exports.mpdConfig = function (next) {
+//  next = next || function () { };
+//  client.sendCommand(mpd.cmd('config', []), function (err, msg) {
+//    if (err) return next(err);
+//    next(null, mpd.parseKeyValueMessage(msg));
+//  });
+//};

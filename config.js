@@ -14,5 +14,9 @@ module.exports = {
     statusPin: 18,
     flashTime: 500,
     lockTime: 500
+  },
+  musicPath: {
+    win: 'C:/Users/Marcin/Music',
+    rpi: '/www/library/music'
   }
 };

@@ -1,5 +1,8 @@
 var router = require('express').Router();
 var player = require('../player');
+var multer = require('multer');
+var config = require('./config');
+var rpiEnv = process.env.NODE_ENV == 'raspberrypi';
 
 var sendMpdStatus = function (next, res) {
   player.status(function (err, status) {
@@ -7,6 +10,42 @@ var sendMpdStatus = function (next, res) {
     res.json(status);
   });
 };
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    if (rpiEnv)
+      cb(null, config.musicPath.rpi);
+    else
+      cb(null, config.musicPath.win);
+  },
+  filename: function (req, file, cb) {
+    var datetimestamp = Date.now();
+    cb(null, 
+      file.fieldname + '-' +
+      datetimestamp + '.' + 
+      file.originalname.split('.')[file.originalname.split('.').length - 1]
+    )
+  }
+});
+
+var upload = multer({
+  storage: storage
+}).single('file');
+
+router.post('/upload', function (req, res, next) {
+  upload(req, res, function (err) {
+    if (err) {
+      res.json({ error_code: 1, err_desc: err });
+      return;
+    }
+    console.log(req.file);
+    player.updateMpd(null, function (err, msg) {
+      if (err) return next(err);
+      console.log(msg);
+      res.json({ error_code: 0, err_desc: null });
+    });
+  });
+});
 
 router.get('/library', function (req, res, next) {
   player.getLibrary(function (err, tracks) {
