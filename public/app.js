@@ -8,7 +8,7 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
 
   $scope.play = function(id) {
     $http.get('/api/play/'+id).then(function(res) {
-      $scope.status = res.data;
+      //$scope.status = res.data;
     });
   };
 
@@ -16,40 +16,40 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
     //state: stop, play, pause
     if ($scope.status.state === 'stop') {
       $http.get('/api/play').then(function (res) {
-        $scope.status = res.data;
+        //$scope.status = res.data;
       });
     } else {
       var arg = $scope.status.state == 'play' ? 1 : 0;
 
       $http.get('/api/pause/' + arg).then(function (res) {
-        $scope.status = res.data;
+        //$scope.status = res.data;
       });
     };
   };
 
   $scope.previous = function () {
     $http.get('/api/prev').then(function (res) {
-      $scope.status = res.data;
+      //$scope.status = res.data;
     });
   };
 
   $scope.next = function () {
     $http.get('/api/next').then(function (res) {
-      $scope.status = res.data;
+     // $scope.status = res.data;
     });
   };
 
   $scope.clear = function () {
     $http.get('/api/plclear').then(function (res) {
       $scope.songs = null;
-      $scope.status = res.data;
+      //$scope.status = res.data;
     });
   };
 
   $scope.addall = function () {
     $http.get('/api/pladdall').then(function (res) {
       //$scope.songs = res.data;
-      $scope.getStatus();
+      //$scope.getStatus();
     });
   };
 
@@ -62,14 +62,17 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
 
   $scope.shuffle = function () {
     $http.get('/api/plshuffle').then(function (res) {
-      $scope.status = res.data;
+      //$scope.status = res.data;
     });
     //$scope.getPlaylist();
   };
 
   $scope.getPlaylist = function () {
-    $http.get('/api/plsongs').then(function (res) {
-      $scope.songs = res.data;
+    $http.get('/api/plsongs').then(function (res) {      
+      if (res.data.length >= 1 && 'file' in res.data[0])
+        $scope.songs = res.data;
+      else
+        $scope.songs = null;
     });
   };
 
@@ -88,16 +91,24 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   };
   ws.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
+    console.log(data);
+    if ('err' in data) {
+      //TODO
+    }
+
     if ('event' in data) {
       switch (data.event) {
         case 'status':
-          $scope.getStatus();
+          $scope.status = data.data;
           break;
         case 'playlist':
-          $scope.getPlaylist();
-          $scope.getStatus();
+          if (data.data.length >= 1 && 'file' in data.data[0])
+            $scope.songs = data.data;
+          else
+            $scope.songs = null;
           break;
       }
+      $scope.$apply();
     }
   };
 
