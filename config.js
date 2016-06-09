@@ -7,6 +7,7 @@ module.exports = {
       port: 6600
     }
   },
+  musicPath: '',
   gpio: {
     playPin: 13,
     previousPin: 19,
@@ -14,9 +15,5 @@ module.exports = {
     statusPin: 18,
     flashTime: 500,
     lockTime: 500
-  },
-  musicPath: {
-    win: 'C:/Users/Marcin/Music',
-    rpi: '/www/library/music'
   }
 };
