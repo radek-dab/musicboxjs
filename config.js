@@ -7,6 +7,7 @@ module.exports = {
       port: 6600
     }
   },
+  musicPath: '',
   gpio: {
     playPin: 13,
     previousPin: 19,

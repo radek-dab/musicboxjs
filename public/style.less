@@ -50,8 +50,12 @@
   .control(@size) {
     display: inline-block;
     .circle(@size);
+    border: 0;
+    outline: 0;
+    padding: 0;
+    align: center;
     vertical-align: middle;
-    padding: @size/4;
+    line-height: @size;
     font-size: @size/2;
     cursor: pointer;
   }
@@ -70,4 +74,13 @@
     background: darken(@navbar-color, 10%);
     cursor: auto;
   }
+}
+
+.uploadForm {
+    position: fixed;
+    z-index: 100;
+    left: 10px;
+    top: 10px;
+    background: #bc1142;
+    color: black;
 }

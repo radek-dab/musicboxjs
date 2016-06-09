@@ -1,5 +1,5 @@
-var app = angular.module('app', [])
-app.controller('ApplicationCtrl', function ($scope, $http) {
+var app = angular.module('app', ['ngFileUpload'])
+app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   $scope.getStatus = function () {
     $http.get('/api/status').then(function (res) {
       $scope.status = res.data;
@@ -48,7 +48,7 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
 
   $scope.addall = function () {
     $http.get('/api/pladdall').then(function (res) {
-      $scope.songs = res.data;
+      //$scope.songs = res.data;
       $scope.getStatus();
     });
   };
@@ -64,7 +64,7 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
     $http.get('/api/plshuffle').then(function (res) {
       $scope.status = res.data;
     });
-    $scope.getPlaylist();
+    //$scope.getPlaylist();
   };
 
   $scope.getPlaylist = function () {
@@ -76,6 +76,8 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
   $scope.getStatus();
   $scope.getPlaylist();
 
+  // WebSocket
+
   var wsUrl = 'ws://' + window.location.host;
   var ws = new WebSocket(wsUrl);
   ws.onopen = function() {
@@ -84,13 +86,41 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
   ws.onclose = function() {
     console.log('WebSocket ' + wsUrl + ' disconnected');
   };
-  ws.onmessage = function(msg) {
+  ws.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
     if ('event' in data) {
       switch (data.event) {
         case 'status':
           $scope.getStatus();
+          break;
+        case 'playlist':
+          $scope.getPlaylist();
+          $scope.getStatus();
+          break;
       }
     }
+  };
+
+  // Upload
+
+  $scope.uploadFiles = function(file, invalidFiles) {
+    if (!file) return;
+    Upload.upload({
+      url: '/api/upload',
+      data: {file: file}
+    }).then(function(res) {
+      $scope.uploadProgress = null;
+      $window.alert('Successfully uploaded new song.');
+    }, function(err) {
+      $scope.uploadProgress = null;
+      $window.alert('An error occured during upload.');
+    }, function(evt) {
+      $scope.uploadProgress = evt.loaded / evt.total;
+    });
+  };
+});
+app.filter('percentage', function() {
+  return function(val) {
+    return angular.isNumber(val) ? Math.round(val * 100) : val;
   };
 });

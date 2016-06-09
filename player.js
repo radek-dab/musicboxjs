@@ -12,9 +12,13 @@ client.on('connect', function() {
 client.on('ready', function() {
   console.log('MPD server is ready to accept commands');
 });
-client.on('system-player', function() {
+client.on('system-player', function () {
   exports.emit('status');
 });
+client.on('system-playlist', function () {
+  exports.emit('playlist');
+});
+
 
 exports.status = function (next) {
   client.sendCommand(mpd.cmd('status', []), function (err, msg) {
@@ -148,3 +152,23 @@ exports.shuffle = function (start, end, next){
     next(null, msg);
   });
 }
+
+//check for updates at specified uri or in whole music library
+exports.updateMpd = function (uri, next) {
+  next = next || function () { };
+  var args = [];
+  if (uri)
+    args.push(uri);
+  client.sendCommand(mpd.cmd('update', args), function (err, msg) {
+    if (err) return next(err);
+    next(null, msg);
+  });
+};
+
+//exports.mpdConfig = function (next) {
+//  next = next || function () { };
+//  client.sendCommand(mpd.cmd('config', []), function (err, msg) {
+//    if (err) return next(err);
+//    next(null, mpd.parseKeyValueMessage(msg));
+//  });
+//};
