@@ -27,9 +27,10 @@
   <nav class="control-bar">
     <button type="file" accept="audio/*" title="Upload music"
             class="secondary-control glyphicon glyphicon-cloud-upload"
-            ng-hide="uploadProgress" ngf-select="uploadFiles($file, $invalidFiles)"></button>
-    <button class="secondary-control" title="Cancel upload" ng-show="uploadProgress">
-      {{uploadProgress | percentage}}
+            ng-hide="upload" ngf-select="uploadFiles($file, $invalidFiles)"></button>
+    <button class="secondary-control" title="Cancel upload"
+            ng-show="upload" ng-click="cancelUpload()">
+      {{upload.progress | percentage}}
     </button>
     <span class="secondary-control glyphicon glyphicon-import"
           title="Add all songs" ng-click="addall()"></span>
