@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngFileUpload'])
-app.controller('ApplicationCtrl', function ($scope, $http) {
+app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   $scope.getStatus = function () {
     $http.get('/api/status').then(function (res) {
       $scope.status = res.data;
@@ -72,14 +72,11 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
       $scope.songs = res.data;
     });
   };
-  
-  $scope.uploadFormVisible = false;
-  $scope.showUploadForm = function() {
-    $scope.uploadFormVisible = !$scope.uploadFormVisible;
-  }
 
   $scope.getStatus();
   $scope.getPlaylist();
+
+  // WebSocket
 
   var wsUrl = 'ws://' + window.location.host;
   var ws = new WebSocket(wsUrl);
@@ -103,33 +100,27 @@ app.controller('ApplicationCtrl', function ($scope, $http) {
       }
     }
   };
-});
-app.controller('FileUpload', ['Upload', '$window', function (Upload, $window) {
-  var vm = this;
-  vm.submit = function () { //function to call on form submit
-    if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
-      vm.upload(vm.file); //call upload function
-    }
-  }
-    
-  vm.upload = function (file) {
+
+  // Upload
+
+  $scope.uploadFiles = function(file, invalidFiles) {
+    if (!file) return;
     Upload.upload({
-      url: 'http://localhost:3000/api/upload', //webAPI exposed to upload the file
-      data: { file: file } //pass file as data, should be user ng-model
-    }).then(function (resp) { //upload function returns a promise
-      if (resp.data.error_code === 0) { //validate success
-        $window.alert('Success ' + resp.config.data.file.name + ' uploaded.');
-      } else {
-        $window.alert('an error occured');
-      }
-    }, function (resp) { //catch error
-      console.log('Error status: ' + resp.status);
-      $window.alert('Error status: ' + resp.status);
-    }, function (evt) {
-      console.log(evt);
-      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('Progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-      vm.progress = 'Progress: ' + progressPercentage + '% '; // capture upload progress
+      url: '/api/upload',
+      data: {file: file}
+    }).then(function(res) {
+      $scope.uploadProgress = null;
+      $window.alert('Successfully uploaded new song.');
+    }, function(err) {
+      $scope.uploadProgress = null;
+      $window.alert('An error occured during upload.');
+    }, function(evt) {
+      $scope.uploadProgress = evt.loaded / evt.total;
     });
   };
-}]);
+});
+app.filter('percentage', function() {
+  return function(val) {
+    return angular.isNumber(val) ? Math.round(val * 100) : val;
+  };
+});
