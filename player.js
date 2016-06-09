@@ -111,7 +111,7 @@ exports.getPlaylist = function (next) {
         return;
       }
       var keyValue = p.match(/([^ ]+): (.*)/);
-
+      
       if (obj[keyValue[1]] !== undefined && keyValue[1] == 'file') {
         results.push(obj);
         obj = {};
@@ -121,7 +121,8 @@ exports.getPlaylist = function (next) {
         obj[keyValue[1]] = keyValue[2];
       }
     });
-    results.push(obj);
+    if ('file' in obj)
+      results.push(obj);
 
     next(null, results);
   });
