@@ -1,4 +1,5 @@
-var app = angular.module('app', ['ngFileUpload'])
+var app = angular.module('app', ['ngFileUpload']);
+
 app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   $scope.getStatus = function () {
     $http.get('/api/status').then(function (res) {
@@ -119,8 +120,42 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
     });
   };
 });
+
 app.filter('percentage', function() {
   return function(val) {
     return angular.isNumber(val) ? Math.round(val * 100) : val;
+  };
+});
+
+app.controller('ProgressBarCtrl', function($scope, $interval) {
+  var interval = null;
+
+  function startInterval() {
+    if (interval) return;
+    interval = $interval(function() {
+      $scope.elapsed += 1;
+    }, 1000);
+  }
+
+  function stopInterval() {
+    if (!interval) return;
+    $interval.cancel(interval);
+    interval = null;
+  }
+
+  $scope.$watch('status', function() {
+    if (!$scope.status) return;
+    var time = $scope.status.time; // Format: elapsed:duration
+    $scope.duration = Number(time.substring(time.lastIndexOf(':') + 1));
+    $scope.elapsed = Number($scope.status.elapsed); // More accurate than above one
+    $scope.state = $scope.status.state;
+    if ($scope.state == 'play')
+      startInterval();
+    else
+      stopInterval();
+  });
+
+  $scope.calculateProgress = function() {
+    return Math.round($scope.elapsed / $scope.duration * 100) + '%';
   };
 });
