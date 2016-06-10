@@ -156,6 +156,6 @@ app.controller('ProgressBarCtrl', function($scope, $interval) {
   });
 
   $scope.calculateProgress = function() {
-    return Math.round($scope.elapsed / $scope.duration * 100) + '%';
+    return $scope.elapsed / $scope.duration * 100 + '%';
   };
 });
