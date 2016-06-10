@@ -145,14 +145,19 @@ app.controller('ProgressBarCtrl', function($scope, $interval) {
 
   $scope.$watch('status', function() {
     if (!$scope.status) return;
-    var time = $scope.status.time; // Format: elapsed:duration
-    $scope.duration = Number(time.substring(time.lastIndexOf(':') + 1));
-    $scope.elapsed = Number($scope.status.elapsed); // More accurate than above one
     $scope.state = $scope.status.state;
-    if ($scope.state == 'play')
-      startInterval();
-    else
-      stopInterval();
+    if ($scope.state == 'stop') {
+      $scope.duration = null;
+      $scope.elapsed = null;
+    } else {
+      var time = $scope.status.time; // Format: elapsed:duration
+      $scope.duration = Number(time.substring(time.lastIndexOf(':') + 1));
+      $scope.elapsed = Number($scope.status.elapsed); // More accurate than above one
+      if ($scope.state == 'play')
+        startInterval();
+      else
+        stopInterval();
+    }
   });
 
   $scope.calculateProgress = function() {
