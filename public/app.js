@@ -105,18 +105,35 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
 
   $scope.uploadFiles = function(file, invalidFiles) {
     if (!file) return;
-    Upload.upload({
+    $scope.upload = Upload.upload({
       url: '/api/upload',
       data: {file: file}
-    }).then(function(res) {
-      $scope.uploadProgress = null;
+    });
+    $scope.upload.then(function(res) {
+      $scope.upload = null;
       $window.alert('Successfully uploaded new song.');
     }, function(err) {
-      $scope.uploadProgress = null;
-      $window.alert('An error occured during upload.');
+      $scope.upload = null;
+      var msg = null;
+      switch (err.status) {
+        case -1:
+          msg = 'Upload canceled.';
+          break;
+        case 400:
+          msg = 'This file cannot be uploaded.';
+          break;
+        default:
+          msg = 'An error occured during upload.';
+      }
+      $window.alert(msg);
     }, function(evt) {
-      $scope.uploadProgress = evt.loaded / evt.total;
+      $scope.upload.progress = evt.loaded / evt.total;
     });
+  };
+  $scope.cancelUpload = function() {
+    if ($scope.upload) {
+      $scope.upload.abort();
+    }
   };
 });
 app.filter('percentage', function() {

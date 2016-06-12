@@ -15,14 +15,12 @@ var storage = multer.diskStorage({
 
 var upload = multer({
   storage: storage,
-  //fileFilter: function (req, file, cb) {
-  //  console.log(file.mimetype);
-  //  cb(null, /^audio\//.test(file.mimetype));
-  //}
+  fileFilter: function (req, file, cb) {
+    cb(null, /^audio\//.test(file.mimetype));
+  }
 });
 
 router.post('/upload', upload.single('file'), function (req, res, next) {
-  console.log(req.file);
   if (!req.file) return res.sendStatus(400); // Bad Request
   player.updateMpd(null, function (err, msg) {
     if (err) return next(err);
