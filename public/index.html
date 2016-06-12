@@ -25,6 +25,8 @@
     </div>
   </div>
   <nav class="control-bar">
+    <div class="progress-bar" ng-controller="ProgressBarCtrl"
+         ng-style="{width: calculateProgress()}"></div>
     <button type="file" accept="audio/*" title="Upload music"
             class="secondary-control glyphicon glyphicon-cloud-upload"
             ng-hide="upload" ngf-select="uploadFiles($file, $invalidFiles)"></button>

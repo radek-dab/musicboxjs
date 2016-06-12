@@ -42,10 +42,16 @@
   bottom: 0;
   width: 100%;
   height: 100px;
-  padding: 20px 5px;
+  padding: 20px 0;
   background: @navbar-color;
   box-shadow: 0 0 10px @shadow-color;
   text-align: center;
+
+  .progress-bar {
+    height: 5px;
+    margin: -20px 0 -5px;
+    background: @primary-color;
+  }
 
   .control(@size) {
     display: inline-block;
