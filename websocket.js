@@ -14,17 +14,27 @@ exports.listen = function(server) {
   });
 };
 
-function broadcastEvent(eve) {
-  var json = JSON.stringify({event: eve});
+function broadcastEvent(eve, msg) {
+  var json = JSON.stringify({event: eve, data: msg});
   clients.forEach(function(client) {
     client.send(json);
   });
 };
 
-player.on('status', function() {
-  broadcastEvent('status');
+player.on('status', function () {
+  player.status(function (err, msg) {
+    if (err) broadcastEvent('status', err);
+    else broadcastEvent('status', msg);
+  });
 });
 
 player.on('playlist', function () {
-  broadcastEvent('playlist');
+  player.getPlaylist(function (err, msg) {
+    if (err) broadcastEvent('playlist', err);
+    else broadcastEvent('playlist', msg);
+  });  
+  player.status(function (err, msg) {
+    if (err) broadcastEvent('status', err);
+    else broadcastEvent('status', msg);
+  });
 });
