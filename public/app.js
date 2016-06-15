@@ -1,4 +1,5 @@
-var app = angular.module('app', ['ngFileUpload'])
+var app = angular.module('app', ['ngFileUpload']);
+
 app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   $scope.getStatus = function () {
     $http.get('/api/status').then(function (res) {
@@ -68,7 +69,7 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   };
 
   $scope.getPlaylist = function () {
-    $http.get('/api/plsongs').then(function (res) {      
+    $http.get('/api/plsongs').then(function (res) {
       if (res.data.length >= 1 && 'file' in res.data[0])
         $scope.songs = res.data;
       else
@@ -79,38 +80,19 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
   $scope.getStatus();
   $scope.getPlaylist();
 
-  // WebSocket
+  // Events
 
-  var wsUrl = 'ws://' + window.location.host;
-  var ws = new WebSocket(wsUrl);
-  ws.onopen = function() {
-    console.log('WebSocket ' + wsUrl + ' connected');
-  };
-  ws.onclose = function() {
-    console.log('WebSocket ' + wsUrl + ' disconnected');
-  };
-  ws.onmessage = function (msg) {
-    var data = JSON.parse(msg.data);
-    console.log(data);
-    if ('err' in data) {
-      //TODO
-    }
+  $scope.$on('status', function(event, data) {
+    $scope.$apply(function() {
+      $scope.status = data;
+    });
+  });
 
-    if ('event' in data) {
-      switch (data.event) {
-        case 'status':
-          $scope.status = data.data;
-          break;
-        case 'playlist':
-          if (data.data.length >= 1 && 'file' in data.data[0])
-            $scope.songs = data.data;
-          else
-            $scope.songs = null;
-          break;
-      }
-      $scope.$apply();
-    }
-  };
+  $scope.$on('playlist', function(event, data) {
+    $scope.$apply(function() {
+      $scope.songs = data;
+    });
+  });
 
   // Upload
 
@@ -130,6 +112,29 @@ app.controller('ApplicationCtrl', function ($scope, $http, $window, Upload) {
     });
   };
 });
+
+app.run(function($rootScope, $timeout) {
+  (function connect() {
+    var wsUrl = 'ws://' + window.location.host;
+    var ws = new WebSocket(wsUrl);
+
+    ws.onopen = function() {
+      console.log('WebSocket ' + wsUrl + ' connected.');
+    };
+
+    ws.onclose = function() {
+      console.log('WebSocket ' + wsUrl + ' disconnected.',
+                  'Reconnect in 10 seconds.');
+      $timeout(connect, 10000);
+    };
+
+    ws.onmessage = function(msg) {
+      var data = JSON.parse(msg.data);
+      $rootScope.$broadcast(data.event, data.data);
+    };
+  })();
+});
+
 app.filter('percentage', function() {
   return function(val) {
     return angular.isNumber(val) ? Math.round(val * 100) : val;
