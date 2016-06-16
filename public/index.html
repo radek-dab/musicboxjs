@@ -34,19 +34,19 @@
             ng-show="upload" ng-click="cancelUpload()">
       {{upload.progress | percentage}}
     </button>
-    <span class="secondary-control glyphicon glyphicon-import"
-          title="Add all songs" ng-click="addall()"></span>
-    <span class="secondary-control glyphicon glyphicon-step-backward"
-          title="Previous" ng-click="previous()"></span>
-    <span class="primary-control glyphicon" title="Play/pause"
-          ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
-          ng-click="pause()"></span>
-    <span class="secondary-control glyphicon glyphicon-step-forward"
-          title="Next" ng-click="next()"></span>
-    <span class="secondary-control glyphicon glyphicon-random"
-          title="Shuffle" ng-click="shuffle()"></span>
-    <span class="secondary-control glyphicon glyphicon-erase"
-          title="Clear playlist" ng-click="clear()"></span>
+    <button class="secondary-control glyphicon glyphicon-import"
+            title="Add all songs" ng-click="addall()"></button>
+    <button class="secondary-control glyphicon glyphicon-step-backward"
+            title="Previous" ng-click="previous()"></button>
+    <button class="primary-control glyphicon" title="Play/pause"
+            ng-class="status.state == 'play' ? 'glyphicon-pause' : 'glyphicon-play'"
+            ng-click="pause()"></button>
+    <button class="secondary-control glyphicon glyphicon-step-forward"
+            title="Next" ng-click="next()"></button>
+    <button class="secondary-control glyphicon glyphicon-random"
+            title="Shuffle" ng-click="shuffle()"></button>
+    <button class="secondary-control glyphicon glyphicon-erase"
+            title="Clear playlist" ng-click="clear()"></button>
   </nav>
 </body>
 </html>
